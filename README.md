@@ -4,9 +4,6 @@
 ![platform](https://img.shields.io/badge/Android-7.0%2B-3DDC84?style=flat-square&logo=android&logoColor=white)
 ![size](https://img.shields.io/badge/APK-2.1_MB-4D6BFE?style=flat-square)
 ![license](https://img.shields.io/badge/license-Patent_License-orange?style=flat-square)
-![ads none](https://img.shields.io/badge/ads-none-brightgreen?style=flat-square)
-![account not required](https://img.shields.io/badge/account-not_required-brightgreen?style=flat-square)
-![data on device](https://img.shields.io/badge/data-on_device-4D6BFE?style=flat-square)
 
 > 一个 **2.1 MB** 的基金持仓 App：无广告、无账号、无后台、数据全在本机。
 > 盘中用指数回归 + 重仓股加权预估净值，再用 **DeepSeek** 做误差归因，越用越准。
@@ -212,11 +209,19 @@ Key 只存在你手机的本地库里，不上传、不外发。
 
 ## 下载
 
-前往 [**Releases**](../../releases) 下载最新 APK，直接安装。
+### ⬇️ [**下载 yjblite-v1.0.0.apk**](https://github.com/aikunx/yangjibao-lite/raw/main/dist/yjblite-v1.0.0.apk)
 
-- 要求：Android 7.0（API 24）以上
-- 已签名（v1/v2/v3），16KB 页对齐
-- 体积：2.1 MB
+| | |
+|---|---|
+| 版本 | v1.0.0 |
+| 体积 | 2,095,177 字节（2.1 MB） |
+| 要求 | Android 7.0（API 24）及以上 |
+| 签名 | v1 / v2 / v3，16KB 页对齐 |
+| SHA-256 | `06aa2ad8063bbbf0b7317550d8f38d676ddd0d7565e664a2df46d402a10e3622` |
+
+安装：下载 → 允许「安装未知来源应用」→ 直接装，**无需登录**。
+
+也可从 [Releases](../../releases) 页面查看版本说明。
 
 ## 构建
 
