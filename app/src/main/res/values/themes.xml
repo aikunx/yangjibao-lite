@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      DayNight：窗口背景随系统深浅色变化。
+      之前写死深色，浅色模式下启动会闪一下黑。
+      背景色与 index.html 的背景变量对齐，做到启动无缝过渡。
+    -->
+    <style name="Theme.YjbLite" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/yjb_bg</item>
+        <item name="android:navigationBarColor">@color/yjb_bg</item>
+        <item name="android:windowBackground">@color/yjb_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- API 35 起系统强制 edge-to-edge，内容会画到状态栏底下。
+             显式退出，回到「系统栏独立占位」的老行为。 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+    </style>
+</resources>
