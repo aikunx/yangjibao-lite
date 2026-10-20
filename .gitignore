@@ -1,0 +1,45 @@
+# 构建产物
+build/
+.gradle/
+local.properties
+*.apk
+*.jks
+*.keystore
+# 备份与临时
+.bak/
+.baseline/
+tool/wvtest/shots*/
+tool/wvtest/app_test.html
+/tmp/
+# 工具
+.gradle/
+*.log
+yjblite.apk.idsig
+
+# 注意：src/ 是**源码**（拆分后的模块），要提交。
+# app/src/main/assets/index.html 是由 tool/concat.py 生成的**产物**，
+# 但它同时是 App 直接加载的文件，所以也一并提交 —— 这样 clone 下来
+# 不用跑构建就能用 Android Studio 直接打开运行。
+
+# 测试框架依赖（体积大，clone 后 npm i 即可）
+tool/wvtest/node_modules/
+
+# 开发过程中的调试截图（不属于项目资产）
+/*.png
+/*.jpg
+
+# 测试产物
+tool/wvtest/shots*/
+tool/wvtest/shots*/
+tool/wvtest/app_test.html
+tool/wvtest/out-*.json
+tool/wvtest/out-*.txt
+tool/wvtest/capture.json
+
+# 临时
+/tmp/
+.DS_Store
+tests/node_modules/
+
+tool/wvtest/
+__pycache__/
