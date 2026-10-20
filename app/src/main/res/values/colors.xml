@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 与 index.html 中的背景色变量保持一致，避免启动瞬间出现色差 -->
+    <color name="yjb_bg">#F2F4F7</color>
+    <color name="yjb_bar">#FFFFFF</color>
+</resources>
