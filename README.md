@@ -4,6 +4,9 @@
 ![platform](https://img.shields.io/badge/Android-7.0%2B-3DDC84?style=flat-square&logo=android&logoColor=white)
 ![size](https://img.shields.io/badge/APK-2.1_MB-4D6BFE?style=flat-square)
 ![license](https://img.shields.io/badge/license-Patent_License-orange?style=flat-square)
+![ads none](https://img.shields.io/badge/ads-none-brightgreen?style=flat-square)
+![account not required](https://img.shields.io/badge/account-not_required-brightgreen?style=flat-square)
+![data on device](https://img.shields.io/badge/data-on_device-4D6BFE?style=flat-square)
 
 > 一个 **2.1 MB** 的基金持仓 App：无广告、无账号、无后台、数据全在本机。
 > 盘中用指数回归 + 重仓股加权预估净值，再用 **DeepSeek** 做误差归因，越用越准。
@@ -276,8 +279,5 @@ Key 只存在你手机的本地库里，不上传、不外发。
 <p align="right">
 <a href="https://github.com/deepseek-ai/deepseek-harness">
 <img src="https://img.shields.io/badge/powered_by-dsh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white" width="121" height="20" alt="powered by dsh">
-![ads none](https://img.shields.io/badge/ads-none-brightgreen?style=flat-square)
-![account not required](https://img.shields.io/badge/account-not_required-brightgreen?style=flat-square)
-![data on device](https://img.shields.io/badge/data-on_device-4D6BFE?style=flat-square)
 </a>
 </p>
