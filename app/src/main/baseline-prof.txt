@@ -1,0 +1,70 @@
+# 基准配置文件（Baseline Profile）
+#
+# 作用：告诉 ART 哪些方法在安装时就做 AOT 编译，
+# 避免首次启动时逐行解释执行。官方实测可让启动与首次交互提速约 30%。
+# 参考：https://developer.android.google.cn/topic/performance/baselineprofiles
+#
+# 格式（ART profile 文本格式）：
+#   H = Hot            热方法
+#   S = Startup        启动阶段调用
+#   P = Post-startup   启动后不久调用
+#   前缀可组合，如 HSPL 表示同时属于启动与热路径
+#
+#   重要：只有「方法规则」（带 ->）可以带标志；
+#        「类规则」（以分号结尾）不允许带任何标志。
+#
+# 这里手工覆盖「冷启动 -> 首屏渲染 -> 拉取行情 -> 切 Tab」这条主路径。
+
+# ---- 应用入口 ----
+HSPLcom/yjb/lite/MainActivity;-><init>()V
+HSPLcom/yjb/lite/MainActivity;->onCreate(Landroid/os/Bundle;)V
+HSPLcom/yjb/lite/MainActivity;->setupBackHandler()V
+HSPLcom/yjb/lite/MainActivity;->applyTheme(Z)V
+HSPLcom/yjb/lite/MainActivity;->closeReader()V
+HSPLcom/yjb/lite/MainActivity;->isSystemDark()Z
+HSPLcom/yjb/lite/MainActivity;->dp(I)I
+HSPLcom/yjb/lite/MainActivity;->onDestroy()V
+HSPLcom/yjb/lite/MainActivity;->onTrimMemory(I)V
+Lcom/yjb/lite/MainActivity;
+
+# ---- JS 桥 ----
+HSPLcom/yjb/lite/JsBridge;->httpGet(Ljava/lang/String;ZLjava/lang/String;)V
+HSPLcom/yjb/lite/JsBridge;->fetch(Ljava/lang/String;Z)Ljava/lang/String;
+HSPLcom/yjb/lite/JsBridge;->refererFor(Ljava/lang/String;)Ljava/lang/String;
+HSPLcom/yjb/lite/JsBridge;->reply(Ljava/lang/String;ZLjava/lang/String;)V
+HSPLcom/yjb/lite/JsBridge;->setTheme(Ljava/lang/String;)V
+HSPLcom/yjb/lite/JsBridge;->updateCanGoBack(Z)V
+HSPLcom/yjb/lite/JsBridge;->toast(Ljava/lang/String;)V
+HSPLcom/yjb/lite/JsBridge;->warmUp()V
+HSPLcom/yjb/lite/JsBridge;->openReader(Ljava/lang/String;)Z
+HSPLcom/yjb/lite/JsBridge;->closeReader()V
+Lcom/yjb/lite/JsBridge;
+
+# ---- 并行 DNS：每个请求都要走 ----
+HSPLcom/yjb/lite/ParallelDns;->lookup(Ljava/lang/String;)Ljava/util/List;
+Lcom/yjb/lite/ParallelDns;
+
+# ---- OkHttp 客户端构建 ----
+HSPLokhttp3/OkHttpClient$Builder;->build()Lokhttp3/OkHttpClient;
+HSPLokhttp3/Request$Builder;->url(Ljava/lang/String;)Lokhttp3/Request$Builder;
+HSPLokhttp3/Request$Builder;->header(Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Request$Builder;
+HSPLokhttp3/Request$Builder;->build()Lokhttp3/Request;
+Lokhttp3/OkHttpClient;
+
+# ---- 协程调度：异步任务都要用 ----
+HSPLkotlinx/coroutines/Dispatchers;->getIO()Lkotlinx/coroutines/CoroutineDispatcher;
+HSPLkotlinx/coroutines/Dispatchers;->getMain()Lkotlinx/coroutines/CoroutineDispatcher;
+Lkotlinx/coroutines/CoroutineScope;
+
+# ---- 阅读层（点资讯时才走）----
+PLcom/yjb/lite/MainActivity;->openReader(Ljava/lang/String;)Z
+
+# ---- 资讯正文提取（兜底路径）----
+PLcom/yjb/lite/ArticleExtractor;->download(Ljava/lang/String;)Ljava/lang/String;
+Lcom/yjb/lite/ArticleExtractor;
+Lcom/yjb/lite/ArticleExtractor$fetch$2;
+
+# ---- OCR 导入持仓 ----
+PLcom/yjb/lite/ocr/OcrEngine;->recognize(Landroid/content/Context;Landroid/graphics/Bitmap;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+Lcom/yjb/lite/ocr/ScreenshotParser;
+Lcom/yjb/lite/OcrEngineProxy;
