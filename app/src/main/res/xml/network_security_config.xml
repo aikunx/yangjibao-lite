@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  网络安全配置。
+
+  默认禁止明文流量（Android 9+ 的默认行为），只对确实只有 HTTP 的服务放行：
+    212.129.244.148  宝妈指数（板块情绪）第三方服务，未提供 HTTPS
+
+  其余所有接口（天天基金 / 腾讯 / 新浪 / 同花顺 / 东财 / 财联社）全部走 HTTPS。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">212.129.244.148</domain>
+    </domain-config>
+</network-security-config>
