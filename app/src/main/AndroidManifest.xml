@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--
+      Play 金标（Play App Quality）适配要点：
+        1. 不强制声明必须触摸屏，让大屏 / 折叠屏 / ChromeOS 也能装
+        2. resizeableActivity=true，支持分屏与自由窗口
+        3. configChanges 里自行处理旋转与深色模式切换，
+           避免旋转时 Activity 重建（重建会导致 WebView 重载、状态丢失）
+    -->
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <!--
+      N5：allowBackup 关掉。
+
+      页面里的数据（持仓 / 自选 / 分组 / 设置）全在 WebView 的
+      localStorage 里，而本项目没有任何 dataExtractionRules /
+      fullBackupContent 排除规则，等于把这份资产信息交给云备份
+      通道以及 `adb backup`。本 App 也没有自己的备份/恢复入口，
+      备份带来的收益远小于暴露面。
+      代价：换机时不走系统备份恢复（产品上本来就没做这条路径）。
+    -->
+    <application
+        android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.YjbLite">
+
+        <!--
+          N6：configChanges 补 fontScale / locale / colorMode。
+
+          少了 fontScale 时，用户在前台去系统设置里改「字体大小 /
+          显示大小」，Activity 就会被重建 → WebView 重新 loadUrl →
+          当前 tab、nav 栈、滚动位置、打开着的弹层、正在填的表单、
+          未完成的 OCR 导入流程**全部消失**，用户被弹回首页，
+          还要重新拉一遍全部网络数据。
+          locale（改语言）与 colorMode（HDR 开关）同理。
+
+          配套改动：MainActivity.createMainWebView() 把 textZoom 固定成
+          100，并在 onConfigurationChanged 里重新钉住——页面是 px 定死
+          的布局，跟随系统字号放大文字会把卡片 / 底栏撑破（见 P1）。
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode|density|smallestScreenSize|fontScale|locale|colorMode"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
