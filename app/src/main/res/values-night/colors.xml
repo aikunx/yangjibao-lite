@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深色模式下的背景与卡片色，同样对齐网页端变量 -->
+    <color name="yjb_bg">#0E1116</color>
+    <color name="yjb_bar">#171C23</color>
+</resources>
