@@ -4563,7 +4563,6 @@ const predict = {
      * 这个数决定了重仓法有多可信：
      * 取到 30 只可能覆盖七成净值，预估就靠谱；
      * 只覆盖三成，剩下七成是黑的，结论只能算参考。
-     * 以前这里算的是「重仓股内部占比」，恒等于 1，等于没有信息。
      */
     const coverage = Math.min(1, totalW / 100);
 
@@ -8155,7 +8154,26 @@ function viewHold() {
       if (c.lagDays != null && c.lagDays >= 2) bits.push('净值 T+' + c.lagDays);
       // 预测依据：让用户知道这个预估是怎么来的，而不是一个来路不明的数字
       if (pr && pr.method === 'index') bits.push('跟 ' + pr.indexName);
-      else if (pr && pr.method === 'holdings') bits.push('重仓加权');
+      else if (pr && pr.method === 'holdings') {
+        /*
+         * 覆盖率诚实化（2026-10）。
+         *
+         * 季报只披露前十大（约 52~54%），而股票仓位实际有 86~88%，
+         * 意味着三分之一的股票敞口不在模型里。
+         * 以前的界面只写「重仓加权」，用户无从判断这个数字有多可信。
+         * 这里把缺失的仓位比例直接写出来——预估自带误差是必然的，
+         * 隐瞒覆盖度才是问题。
+         */
+        const cvg = pr.covered;
+        if (cvg != null && isFinite(cvg)) {
+          const miss2 = Math.round((1 - cvg) * 100);
+          bits.push(miss2 >= 8 ? '重仓加权(含' + miss2 + '%未覆盖)' : '重仓加权');
+          // 覆盖率过低时提示：这只基金的预估参考价更高
+          if (cvg < 0.6) bits.push('覆盖偏低');
+        } else {
+          bits.push('重仓加权');
+        }
+      }
       else if (pr && pr.method === 'recent') bits.push('近期均值');
       if (c.divCount) {
         bits.push(c.divMode === 'cash'
