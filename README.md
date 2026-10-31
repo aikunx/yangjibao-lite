@@ -225,14 +225,46 @@ Key 只存在你手机的本地库里，不上传、不外发。
 
 ## 构建
 
+### 只改了页面逻辑（最常见）
+
+改 `src/*.js` / `*.css` / `*.html` 之后，**不需要跑 gradle**：
+
+```bash
+export ANDROID_HOME=/d/tools/android-sdk
+export JAVA_HOME=/d/tools/jdk-21.0.12.1+1
+export YJB_KEYSTORE=/path/to/yjb.jks
+export YJB_STORE_PASS=...   YJB_KEY_PASS=...
+
+python tool/quick_build.py
+# 产物：dist/yjblite-quick.apk（秒级完成）
+```
+
+原理：以 `dist/yjblite-baseline.apk` 为底包（`classes.dex` 与
+`resources.arsc` 不变），只替换 `assets/index.html`，再 zipalign + 重签。
+产物与 gradle 编译等价，因为 Kotlin 与资源完全没动。
+
+**为什么不用 gradle**：除了慢，在部分 Windows 环境里 gradle daemon
+会因为 `127.0.0.1` 的 TCP 自连被拦而**根本起不来**（`Could not connect
+to the Gradle daemon`），此时只能走这条路径。
+
+脚本自带三道保险：
+1. `concat.py` 拼接后比对 sha256，不一致直接中止
+2. 丢掉失效的 `META-INF` 旧签名残留
+3. 产物里的 `index.html` 与源码逐字节比对，不一致不许装
+
+### 改了 Kotlin / 资源 / 依赖
+
 ```bash
 # 环境：JDK 21 / Android SDK 35 / Gradle 8.7
 ./gradlew assembleRelease
-
 # 产物在 app/build/outputs/apk/release/
 ```
 
 签名脚本见 `tool/build_all.sh`（含 zipalign -P 16 + apksigner + 产物校验）。
+
+> **给下一个 AI 的提示**：接手这个项目时，先看 `STATUS.md` 的「已知问题」与
+> 「容易踩的坑」两节。项目历史上因为「改完 index.html 没跑语法检查」「正则批量
+> 替换把手写代码改坏」吃过两次大亏，那两节就是为此写的。
 
 ---
 
